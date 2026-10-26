@@ -41,7 +41,7 @@ Raising Kp shrinks this offset but cannot remove it (and invites oscillation). A
 1. Remember which side the line was last seen on (`last_dir`, ignoring tiny errors near centre).
 2. Pivot in place toward that side at 120 PWM (one wheel forward, the other back), since the line most likely left the array on that side.
 3. If the line is found again, resume PID with the integral and derivative state reset (no derivative kick).
-4. If it is not found within 600 ms, stop both motors. The stop is latched until reset, which is the safe default. A 180 degree turn is deliberately *not* used here: it is the right move for a true dead end in the maze (Task 8), not for an ordinary lost line.
+4. If it is not found within 600 ms, stop both motors. The stop is latched until reset, which is the safe default. A 180 degree turn is deliberately *not* used here: it is the right move for a true dead end in the maze (Task 8), not for an ordinary lost line. In the maze a dead end is detected separately (the line ends while the error was near zero) and gets its own U-turn state, because a U-turn at the recovery speed takes roughly 0.6 s (assuming an 8 cm track width), about the same as this 600 ms timeout.
 
 ## 4. Tuning choices
 

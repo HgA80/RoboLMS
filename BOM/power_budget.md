@@ -1,6 +1,6 @@
 # Task 5 - Power budget and battery selection
 
-Block diagram: `power_block_diagram.svg`. Parts: `bom.md`.
+Block diagram: `WiringAndPowerDiagram.jpeg`. Parts: `bom.md`.
 Everything marked *assumed* should be replaced with a multimeter measurement once the robot is built.
 
 ## 1. Current draw per component

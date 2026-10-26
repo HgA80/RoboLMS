@@ -16,9 +16,8 @@ namespace lf {
 static const int    NUM_SENSORS = 5;
 static const int8_t WEIGHTS[NUM_SENSORS] = {-2, -1, 0, 1, 2};  // leftmost ... rightmost
 
-// ---------------------------------------------------------------------------
 // Tunable parameters (starting values - see docs/pid_control_and_tuning.md)
-// ---------------------------------------------------------------------------
+
 struct Config {
   float    kp, ki, kd;           // PID gains (output unit: PWM counts)
   float    i_max_out;            // max |Ki * integral| contribution (anti-windup)
@@ -34,9 +33,8 @@ struct Config {
         min_total(150.0f), recover_speed(120), recover_timeout_ms(600) {}
 };
 
-// ---------------------------------------------------------------------------
+
 // Task 1, part 2: clamp a signed command to [-maxMag, +maxMag], keeping its sign
-// ---------------------------------------------------------------------------
 inline int clampInt(int v, int maxMag) {
   if (maxMag < 0) maxMag = -maxMag;   // guard against a negative limit
   if (v > maxMag)  return  maxMag;
@@ -46,9 +44,9 @@ inline int clampInt(int v, int maxMag) {
 
 inline int roundToInt(float x) { return (int)(x >= 0.0f ? x + 0.5f : x - 0.5f); }
 
-// ---------------------------------------------------------------------------
+
 // Min-max calibration: map a raw 12-bit reading to 0..1000 (1000 = darkest/line)
-// ---------------------------------------------------------------------------
+ 
 inline float normalise(int raw, int mn, int mx) {
   if (mx <= mn) return 0.0f;                          // calibration failed / no span
   float v = (float)(raw - mn) * 1000.0f / (float)(mx - mn);
@@ -57,13 +55,13 @@ inline float normalise(int raw, int mn, int mx) {
   return v;
 }
 
-// ---------------------------------------------------------------------------
+
 // Task 1, part 1: weighted centroid. Returns false if the line is NOT seen.
 //   position = sum(w_i * s_i) / sum(s_i)       range -2 .. +2
 // The all-zero case (sum == 0 -> divide by zero) is handled explicitly. A
 // "too faint" total (< min_total) is also treated as lost, because real
 // calibrated sensors are rarely exactly zero.
-// ---------------------------------------------------------------------------
+
 inline bool linePosition(const float s[NUM_SENSORS], float min_total, float &pos) {
   float num = 0.0f, den = 0.0f;
   for (int i = 0; i < NUM_SENSORS; i++) {
@@ -75,9 +73,9 @@ inline bool linePosition(const float s[NUM_SENSORS], float min_total, float &pos
   return true;
 }
 
-// ---------------------------------------------------------------------------
+
 // PID with anti-windup and no "derivative kick" on the first sample
-// ---------------------------------------------------------------------------
+
 struct Pid {
   float kp, ki, kd, i_max_out;
   float integral, last_error;
@@ -104,9 +102,7 @@ struct Pid {
   }
 };
 
-// ---------------------------------------------------------------------------
 // One control step: sensors in -> motor commands out
-// ---------------------------------------------------------------------------
 enum State : uint8_t { FOLLOWING = 0, RECOVERING = 1, STOPPED = 2 };
 
 struct Output {

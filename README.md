@@ -21,7 +21,7 @@ ESP32 line / maze follower: PID line following in C++ (Arduino framework), a BOM
 | 5 Power budget | `BOM/power_budget.md` |
 | 6 Electronics and hardware | `BOM/wiring_diagram.svg`, `docs/wiring_and_troubleshooting.md` |
 | 7 Wireless diagnostics | `docs/wireless_diagnostics.md`, `docs/wireless_architecture.svg` |
-| 8 Maze solving | `docs/maze_solving.md`, `docs/maze_example.svg` |
+| 8 Maze solving | `docs/maze_solving.md` and its hand-drawn annotated maze diagram (in `docs/`) |
 | 9 Implementation | `src/line_follower/` (code); tuning notes in `docs/pid_control_and_tuning.md` |
 
 ## How to run
@@ -45,7 +45,7 @@ It runs 34 checks against hard-coded sensor arrays and prints a telemetry-style 
 ## Assumptions
 
 - Sensor readings: higher voltage means darker (line), 12-bit ADC, min-max calibration at startup (Appendix A).
-- Junctions in the maze are 90 degrees; the goal is marked distinctly; wheel encoders measure edge lengths.
+- Junction angles need not be exactly 90 degrees (branches are only classified as left, straight or right); the goal is marked distinctly; both wheels have encoders, giving edge lengths and heading; wheel diameter and track width are measured on the built robot.
 - Prices in `BOM/bom.md` are as listed on the supplier pages on 25 Oct 2026, and "Est." items are not verified. Motor currents in `BOM/power_budget.md` are estimates to be replaced by measurements.
 
 ## Limitations
@@ -53,7 +53,7 @@ It runs 34 checks against hard-coded sensor arrays and prints a telemetry-style 
 - **Not tested on hardware.** The core logic is tested on a PC; the `.ino` was not compiled against a board here. PID gains are starting values, not tuned values.
 - **Appendix A pin caveats on a real WROOM-32:** GPIO11 (IN4) is an SPI-flash pin and will not work (remap to GPIO4 by changing the constant in the sketch); GPIO12 is a boot-strapping pin (safe with the TB6612's internal pull-down); GPIO25 is an ADC2 channel, unreadable while Wi-Fi is on, which is why the diagnostics use BLE.
 - **Driver choice:** the BOM uses a TB6612FNG instead of Appendix A's L298N; the pin constants are the same for both, so the firmware runs on either driver.
-- Encoder reading, soft-start ramp, stall detection, the BLE telemetry link and the maze exploration are described in the notes but **not implemented** in the code.
+- Encoder reading, soft-start ramp, stall detection, the BLE telemetry link, junction / dead-end / goal detection and the maze exploration are described in the notes but **not implemented** in the code.
 - Fault-detection thresholds for the wireless diagnostics are reasoned, not tested on real data.
 
 ## References
