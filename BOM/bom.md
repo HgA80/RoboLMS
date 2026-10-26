@@ -10,10 +10,10 @@ Differential-drive robot. ESP32-WROOM-32 reads a 5-channel analog IR array and d
 
 | # | Component (exact model) | Qty | Unit price (Rs) | Line total (Rs) | Supplier / link | Key specs | Why this part, why this quantity |
 |---|---|---|---|---|---|---|---|
-| 1 | ESP WROOM 32 Wi-Fi/Bluetooth Dev Board, 30-pin (SKU AI0038) | 1 | 439 | 439 | https://robu.in/product/esp-wroom-32-esp32-wifi-bt-ble-mcu-module/ | ESP32-WROOM-32, 4 MB flash, 30 pins, 3.3 V logic | Controller named in Appendix A. One board runs sensing, PID and Wi-Fi/BLE diagnostics. |
+| 1 | ESP WROOM 32 Wi-Fi/Bluetooth Dev Board, 30-pin (SKU AI0038) | 1 | 439 | 439 | Robu - https://robu.in/product/esp-wroom-32-esp32-wifi-bt-ble-mcu-module/ | ESP32-WROOM-32, 4 MB flash, 30 pins, 3.3 V logic | Controller named in Appendix A. One board runs sensing, PID and Wi-Fi/BLE diagnostics. |
 | 2 | TB6612FNG Dual Motor Driver Module 1A (SKU AI0999) | 1 | 147 | 147 | Zbotic - https://zbotic.in/product/tb6612fng-dual-motor-driver-module-1a-for-arduino/ | 1.2 A continuous / 3.2 A peak per channel, logic 2.7-5.5 V, MOSFET H-bridge, STBY pin | Two channels = left and right motor, so one module. MOSFET output loses ~0.5 V vs ~2 V for the L298N, and it takes 3.3 V logic directly. Pin-compatible with Appendix A's ENA/IN1/IN2/ENB/IN3/IN4. |
 | 3 | N20 12V 300RPM Micro Metal Gear Motor With Encoder (GA12-N20) | 2 | 514 | 1,028 | Zbotic - https://zbotic.in/product/n20-12v-300rpm-micro-metal-gear-motor-with-encoder/ | 12 V, 300 RPM, metal gears, 3 PPR encoder, encoder supply 3.3-5 V, 2 signal wires | One per drive wheel. Encoders on both wheels give distance, speed and (from the difference between the two wheels) heading, for maze mapping and closed-loop speed control. At ~10.5 V from the driver this is roughly 260 RPM, about 0.46 m/s with a 34 mm wheel. |
-| 4 | TCRT5000L 5-Channel Infrared Line Tracking Sensor Module | 1 | 209.00 | 209.00 | https://robu.in/product/tcrt5000l-5-channel-tracking-sensor-tracking-module-infrared-sensor/ | 5 TCRT5000 sensors, 15 mm pitch, supply 3.3-5 V, 5 outputs, mounting holes | One board holds all 5 sensors at fixed, equal spacing, matching the weights [-2..2]. Run it from 3.3 V so outputs stay within the ESP32 ADC range. |
+| 4 | TCRT5000L 5-Channel Infrared Line Tracking Sensor Module | 1 | 209.00 | 209.00 |Robu - https://robu.in/product/tcrt5000l-5-channel-tracking-sensor-tracking-module-infrared-sensor/ | 5 TCRT5000 sensors, 15 mm pitch, supply 3.3-5 V, 5 outputs, mounting holes | One board holds all 5 sensors at fixed, equal spacing, matching the weights [-2..2]. Run it from 3.3 V so outputs stay within the ESP32 ADC range. |
 | 5 | Orange 11.1V 1300mAh 40C 3S LiPo (Robu SKU 43002) | 1 | 1,399.00 | 1,399.00 | Robu - search SKU 43002 at https://robu.in/product-category/batteries/battery/lithium-polymer-li-po | 11.1 V (12.6 V full), 1300 mAh, 40C continuous, 74x32x22 mm, XT60 + JST-XH balance | Appendix A specifies 3S. 40C x 1.3 Ah = 52 A capability, far above our ~2 A worst case. One pack runs the whole robot. |
 | 6 | iMax B3 LiPo Battery Charger (US plug) | 1 | 335 | 335 | Zbotic - https://zbotic.in/product/imax-b3-lipo-battery-charger/ | 2S/3S balance charger, JST-XH balance ports, mains input | A LiPo needs a balance charger. Skip this if your club or hostel already has one. |
 | 7 | Mini MP1584 DC-DC 3A Adjustable Buck Module (SKU AI5952) | 1 | 52 | 52 | Zbotic - https://zbotic.in/product/mini-mp1584-dc-dc-3a-adjustable-buck-module/ | Input 4.5-28 V, output 0.8-20 V adjustable, 3 A max | The TB6612 module has no 5 V output, so the ESP32 needs its own 5 V supply. A buck is efficient; a linear regulator would burn (11.1 - 5) V x I as heat. Set to 5.0 V with a multimeter BEFORE connecting the ESP32. |
@@ -35,21 +35,22 @@ Differential-drive robot. ESP32-WROOM-32 reads a 5-channel analog IR array and d
 | 17 | Jumper wires (F-F and M-F), 40-pack | 1 | 100 | 100 | Signal connections. |
 | 18 | Perfboard (~5x7 cm) + two 15-pin female header strips | 1 + 2 | 60 | 60 | Socket for the ESP32 and a shared power/ground bus. |
 | 19 | M3 screw / nut / standoff kit | 1 | 100 | 100 | Mounts boards to the chassis. |
-| | **Subtotal B** | | | **~740** | |
-
-Optional (not counted): LiPo low-voltage buzzer alarm, est. Rs 100, protects against over-discharge.
+| 20 |LiPo low-voltage buzzer alarm | 1 | 109 | 109 | protects against over-discharge. |
+| | **Subtotal B** | | | **~840** | |
 
 ## C. Budget
 
 | Item | Rs |
 |---|---|
-| Subtotal A (priced) | 3,737.77 |
+| Subtotal A (priced) | ~ 3,780. |
 | Subtotal B (estimated) | ~740 |
 | Shipping (est.; several Zbotic pages state free shipping, Robu is free above Rs 499, Robocraze unverified) | ~300 |
 | Contingency / spares (spare TB6612 147.50, ESP32 410.64, MP1584 52.39, sensor array 209.00 = 819.53, rounded up for price changes) | 1,000 |
 | **Total** | **~5,780** (about 5,880 with the LiPo alarm) |
 
 Headroom of about Rs 4,200 against the Rs 10,000 limit (about Rs 4,100 with the optional alarm).
+
+
 
 
 ## D. Why the TB6612FNG instead of the L298N (major component choice)
